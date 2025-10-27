@@ -45,6 +45,7 @@ function Register() {
           email,
           address,
           phone,
+          role: "USER",
         }),
       });
       const data = await response.json();
