@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "./Api/Api";
 
 function Register() {
   const [username, setUsername] = useState("");
@@ -34,25 +35,17 @@ function Register() {
     }
 
     try {
-      const response = await fetch("http://localhost:8080/retailstore/users", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-          email,
-          address,
-          phone,
-          role: "USER",
-        }),
+      const response = await api.post("/users", {
+        username,
+        password,
+        email,
+        address,
+        phone,
+        role: "USER",
       });
-      const data = await response.json();
 
-      if (response.ok) {
+      if (response.status == 200) {
         setMessage("Đăng ký thành công!");
-        setTimeout(() => navigate("/"), 1500);
       } else {
         setMessage(data.message || "Đăng ký thất bại");
       }
