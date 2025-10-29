@@ -20,10 +20,16 @@ function Login() {
 
     try {
       const response = await api.post("/auth/login", { username, password });
-      localStorage.setItem("token", response.data.data.token);
+      const token = response.data.data.token;
+      const userId = response.data.data.userResponse.userId;
+      console.log(response);
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("userId", userId);
+
       navigate("/dashboard");
     } catch (err) {
-      setMessage(err.response?.data?.message || "Đăng nhập thất bại");
+      setMessage(err.response.data.message || "Đăng nhập thất bại");
     }
   };
 
