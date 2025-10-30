@@ -10,14 +10,16 @@ function HomePage() {
   const [pageInfo, setPageInfo] = useState({ totalPages: 1 });
   const [openMenu, setOpenMenu] = useState(false);
   const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
 
   const handleSearch = async () => {
     try {
       const res = await api.get("/products/search", {
-        params: { keyword, pageNo: page, pageSize: 4 },
+        params: { keyword, pageNo: page, pageSize: 8 },
       });
-      console.log(res);
       const data = res.data.data;
+      console.log(data);
+
       setProducts(data.content);
       setPageInfo(data.page);
     } catch (err) {
@@ -29,17 +31,42 @@ function HomePage() {
     handleSearch();
   }, [page]);
 
+  const handleAddToCart = async (productId) => {
+    try {
+      const res = await api.put(`/carts/${userId}`, {
+        items: [
+          {
+            productId,
+            quantity: 1,
+          },
+        ],
+      });
+      console.log(res);
+      alert("Thêm giỏ hàng thành công");
+      console.log(productId);
+    } catch (err) {
+      console.error("Lỗi khi thêm giỏ hàng:", err);
+      alert("Không thể thêm vào giỏ hàng!");
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
 
       <div className="flex-1 p-8 relative">
-        <div className="flex justify-end mb-4 relative">
+        <div className="flex justify-between mb-4 relative">
+          <button
+            onClick={() => navigate("/cartPage")}
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition mr-4"
+          >
+            🧺Giỏ hàng
+          </button>
           <button
             onClick={() => setOpenMenu(!openMenu)}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition"
           >
-            Tài khoản
+            👨🏻‍💻Tài khoản
           </button>
 
           {openMenu && (
@@ -56,6 +83,7 @@ function HomePage() {
               <button
                 onClick={() => {
                   localStorage.removeItem("token");
+                  localStorage.removeItem("userId");
                   navigate("/");
                 }}
                 className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 rounded-b-lg"
@@ -98,12 +126,19 @@ function HomePage() {
               <img
                 src={`/images/${p.imageUrl}`}
                 alt={p.name}
-                className="w-full h-80 object-cover rounded-lg mb-4"
+                className="w-full h-60 object-cover rounded-lg mb-4"
               />
               <h2 className="text-lg font-semibold">{p.name}</h2>
               <p className="text-gray-600">{p.description}</p>
               <p className="text-teal-600 font-bold">{p.price} ₫</p>
               <p className="text-sm text-gray-500">Tồn kho: {p.stock}</p>
+
+              <button
+                onClick={() => handleAddToCart(p.productId)}
+                className="mt-3 w-full bg-emerald-500 hover:bg-green-600 text-white py-2 rounded-lg"
+              >
+                🛒Thêm vào giỏ hàng
+              </button>
             </div>
           ))}
         </div>

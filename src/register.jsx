@@ -43,6 +43,7 @@ function Register() {
         phone,
         role: "USER",
       });
+      console.log(response);
 
       if (response.status == 200) {
         setMessage("Đăng ký thành công!");

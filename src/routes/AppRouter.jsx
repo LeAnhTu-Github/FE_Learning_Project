@@ -8,6 +8,7 @@ import UserInfor from "../pages/UserInfor";
 import ProductsManage from "../pages/ProductsManage";
 import SettingSystem from "../pages/SettingSystem";
 import HomePage from "../pages/HomePage";
+import CartPage from "../pages/CartPage";
 
 function AppRouter() {
   return (
@@ -17,6 +18,7 @@ function AppRouter() {
       <Route path="/usersManage" element={<UsersManage />} />
       <Route path="/settingSystem" element={<SettingSystem />} />
       <Route path="/userInfor" element={<UserInfor />} />
+      <Route path="/cartPage" element={<CartPage />} />
 
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<Dashboard />} />
