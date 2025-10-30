@@ -10,7 +10,7 @@ function UserInfor() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  const userId = localStorage.getItem("userID");
+  const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
   useEffect(() => {
