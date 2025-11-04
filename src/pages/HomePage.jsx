@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import api from "../Api/Api";
 import { useNavigate } from "react-router-dom";
-
+import { toast } from "react-toastify";
 function HomePage() {
   const [products, setProducts] = useState([]);
   const [keyword, setKeyword] = useState("");
@@ -42,11 +42,11 @@ function HomePage() {
         ],
       });
       console.log(res);
-      alert("Thêm giỏ hàng thành công");
+      toast.success("Thêm vào giỏ hàng thành công!");
       console.log(productId);
     } catch (err) {
       console.error("Lỗi khi thêm giỏ hàng:", err);
-      alert("Không thể thêm vào giỏ hàng!");
+      toast.error("Lỗi khi thêm sản phẩm vào giỏ hàng!");
     }
   };
 
