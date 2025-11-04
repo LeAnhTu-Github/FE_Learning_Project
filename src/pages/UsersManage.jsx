@@ -40,10 +40,13 @@ const UsersManage = () => {
     if (!confirmDelete) return;
     try {
       await api.delete(`users/${userId}`);
-      alert("ĐÃ XÓA THÀNH CÔNG");
+
+      toast.success("Xóa thành công!");
+
       setUsers((prev) => prev.filter((user) => user.userId !== userId));
     } catch (err) {
-      alert("XÓA THẤT BẠI");
+      toast.error("Xóa thất bại!");
+
       console.err(err);
     }
   };
@@ -91,23 +94,26 @@ const UsersManage = () => {
 
   const handleSave = async () => {
     try {
-      const res = await api.post(
-        `/users/update/${editingUser.userId}`,
-        formData
-      );
-      alert("Cập nhật thành công");
-      setUsers((prev) =>
-        prev.map((user) =>
-          user.userId === editingUser.userId ? { ...user, ...formData } : user
-        )
-      );
+      const dataToSend = { ...formData };
+
+      if (!dataToSend.password || dataToSend.password.trim() === "") {
+        delete dataToSend.password;
+      }
+
+      if (dataToSend.phone) {
+        dataToSend.phone = dataToSend.phone.toString();
+      }
+
+      await api.post(`/users/update/${editingUser.userId}`, dataToSend);
+
+      toast.success("Cập nhật thành công!");
+      await fetchUsers();
       setEditingUser(null);
     } catch (err) {
-      alert("Cập nhật thất bại");
       console.error(err);
+      toast.error("Cập nhật thất bại!");
     }
   };
-
   return (
     <div className="flex min-h-screen bg-gray-100 text-gray-900">
       <Sidebar />
