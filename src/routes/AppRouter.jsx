@@ -9,6 +9,7 @@ import ProductsManage from "../pages/ProductsManage";
 import SettingSystem from "../pages/SettingSystem";
 import HomePage from "../pages/HomePage";
 import CartPage from "../pages/CartPage";
+import Checkout from "../pages/CheckoutPage";
 
 function AppRouter() {
   return (
@@ -19,6 +20,7 @@ function AppRouter() {
       <Route path="/settingSystem" element={<SettingSystem />} />
       <Route path="/userInfor" element={<UserInfor />} />
       <Route path="/cartPage" element={<CartPage />} />
+      <Route path="/checkout" element={<Checkout />} />
 
       <Route path="/register" element={<Register />} />
       <Route path="/dashboard" element={<Dashboard />} />
