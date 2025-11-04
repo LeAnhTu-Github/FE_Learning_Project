@@ -52,7 +52,6 @@ function Login() {
         <h1 className="text-3xl font-extrabold text-gray-800 mb-2">
           TungWatch
         </h1>
-        <p className="text-sm text-gray-500 mb-8">Đẳng cấp thời gian</p>
 
         <div className="w-full flex flex-col gap-4">
           <div>

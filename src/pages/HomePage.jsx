@@ -9,6 +9,7 @@ function HomePage() {
   const [page, setPage] = useState(0);
   const [pageInfo, setPageInfo] = useState({ totalPages: 1 });
   const [openMenu, setOpenMenu] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
 
@@ -18,8 +19,6 @@ function HomePage() {
         params: { keyword, pageNo: page, pageSize: 8 },
       });
       const data = res.data.data;
-      console.log(data);
-
       setProducts(data.content);
       setPageInfo(data.page);
     } catch (err) {
@@ -27,11 +26,33 @@ function HomePage() {
     }
   };
 
+  const fetchCart = async () => {
+    try {
+      const res = await api.get(`/carts/${userId}`);
+      const cart = res.data.data;
+      if (cart && cart.items) {
+        setCartItems(cart.items.map((i) => i.product.productId));
+      }
+    } catch (err) {
+      console.log("Lỗi tải giỏ hàng:", err);
+    }
+  };
+  console.log("cartItem:", cartItems);
+
   useEffect(() => {
     handleSearch();
   }, [page]);
 
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
   const handleAddToCart = async (productId) => {
+    if (cartItems.includes(productId)) {
+      alert("Sản phẩm này đã có trong giỏ hàng!");
+      return;
+    }
+
     try {
       const res = await api.put(`/carts/${userId}`, {
         items: [
@@ -42,8 +63,9 @@ function HomePage() {
         ],
       });
       console.log(res);
-      toast.success("Thêm vào giỏ hàng thành công!");
-      console.log(productId);
+      alert("Thêm giỏ hàng thành công ✅");
+
+      setCartItems((prev) => [...prev, productId]);
     } catch (err) {
       console.error("Lỗi khi thêm giỏ hàng:", err);
       toast.error("Lỗi khi thêm sản phẩm vào giỏ hàng!");
@@ -55,13 +77,7 @@ function HomePage() {
       <Sidebar />
 
       <div className="flex-1 p-8 relative">
-        <div className="flex justify-between mb-4 relative">
-          <button
-            onClick={() => navigate("/cartPage")}
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow-md transition mr-4"
-          >
-            🧺Giỏ hàng
-          </button>
+        <div className="flex justify-end mb-4 relative">
           <button
             onClick={() => setOpenMenu(!openMenu)}
             className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md transition"
@@ -135,14 +151,22 @@ function HomePage() {
 
               <button
                 onClick={() => handleAddToCart(p.productId)}
-                className="mt-3 w-full bg-emerald-500 hover:bg-green-600 text-white py-2 rounded-lg"
+                className={`mt-3 w-full py-2 rounded-lg text-white font-semibold ${
+                  cartItems.includes(p.productId)
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-emerald-500 hover:bg-green-600"
+                }`}
+                disabled={cartItems.includes(p.productId)}
               >
-                🛒Thêm vào giỏ hàng
+                {cartItems.includes(p.productId)
+                  ? "✔ Đã có trong giỏ"
+                  : "🛒 Thêm vào giỏ hàng"}
               </button>
             </div>
           ))}
         </div>
 
+        {/* Phân trang */}
         <div className="flex justify-center mt-8 gap-4 items-center">
           <button
             disabled={page === 0}
