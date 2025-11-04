@@ -96,7 +96,7 @@ function ProductsManage() {
     <div className="flex min-h-screen bg-gray-100">
       <Sidebar />
       <div className="flex-1 p-8 relative">
-        <h1 className="text-2xl font-bold mb-6 text-blue-600 text-center">
+        <h1 className="text-2xl font-bold mb-6  text-blue-600 text-center">
           Quản lý sản phẩm
         </h1>
         <div className="mb-4 text-center">
@@ -120,13 +120,20 @@ function ProductsManage() {
               <tr>
                 <th className="py-3 px-4 text-left">ID</th>
                 <th className="py-3 px-4 text-left">Tên sản phẩm</th>
-                <th className="py-3 px-4 text-left">Mô tả</th>
+                <th className="py-3 px-4 text-left hidden md:table-cell">
+                  Mô tả
+                </th>
                 <th className="py-3 px-4 text-left">Giá</th>
-                <th className="py-3 px-4 text-left">Hình ảnh</th>
-                <th className="py-3 px-4 text-left">Tồn kho</th>
+                <th className="py-3 px-4 text-left hidden sm:table-cell">
+                  Hình ảnh
+                </th>
+                <th className="py-3 px-4 text-left hidden sm:table-cell">
+                  Tồn kho
+                </th>
                 <th className="py-3 px-4 text-center">Action</th>
               </tr>
             </thead>
+
             <tbody>
               {products.map((p, index) => (
                 <tr
@@ -137,16 +144,21 @@ function ProductsManage() {
                 >
                   <td className="px-4 py-3">{p.productId}</td>
                   <td className="px-4 py-3">{p.name}</td>
-                  <td className="px-4 py-3">{p.description}</td>
+                  <td className="px-4 py-3 hidden md:table-cell">
+                    {p.description}
+                  </td>
                   <td className="px-4 py-3">{p.price.toLocaleString()} ₫</td>
-                  <td className="px-4 py-3">
+
+                  <td className="px-4 py-3 hidden sm:table-cell">
                     <img
                       src={`/images/${p.imageUrl}`}
                       alt={p.name}
-                      className="w-20 h-20 object-cover rounded-md"
+                      className="w-16 h-16 object-cover rounded-md"
                     />
                   </td>
-                  <td className="px-4 py-3">{p.stock}</td>
+
+                  <td className="px-4 py-3 hidden sm:table-cell">{p.stock}</td>
+
                   <td className="px-4 py-3 text-center space-x-2">
                     <button
                       onClick={() => handleEditClick(p)}
@@ -154,6 +166,7 @@ function ProductsManage() {
                     >
                       Sửa
                     </button>
+
                     <button
                       onClick={() => handleDelete(p.productId)}
                       className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
@@ -163,16 +176,6 @@ function ProductsManage() {
                   </td>
                 </tr>
               ))}
-              {products.length === 0 && !loading && (
-                <tr>
-                  <td
-                    colSpan="7"
-                    className="text-center text-gray-500 py-6 italic"
-                  >
-                    Không có sản phẩm nào.
-                  </td>
-                </tr>
-              )}
             </tbody>
           </table>
 
